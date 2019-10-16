@@ -7,6 +7,8 @@ And OIDC Provider Server created using:
 
 It is all written in TypeScript so you will need to `npm install -g typescript` and then run `tsc` to build it if you make any changes.
 
+Install dependencies with `npm install`.
+
 To run it, you can do `node build/app.js` and it will be accessible on port `3000` and you can see the configuration at `/.well-known/openid-configuration`.
 
 ## Comments
