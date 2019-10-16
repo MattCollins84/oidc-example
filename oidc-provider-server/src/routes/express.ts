@@ -111,7 +111,7 @@ export const routes = (app, provider) => {
   app.post('/interaction/:uid/login', setNoCache, body, async (req, res, next) => {
 
     try {
-      const { prompt: { name, details } } = await provider.interactionDetails(req, res);
+      const { prompt: { name } } = await provider.interactionDetails(req, res);
       assert.equal(name, 'login');
       const account = await Account.findFromDB(req.body)
 

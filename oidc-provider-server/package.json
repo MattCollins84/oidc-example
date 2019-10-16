@@ -4,7 +4,7 @@
   "description": "Example OIDC Provider",
   "main": "build/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "debug": "$env:DEBUG=\"oidc-provider:*\"; nodemon .\\build\\app.js"
   },
   "repository": {
     "type": "git",

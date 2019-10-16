@@ -10,7 +10,7 @@
     const mgr = new Oidc.UserManager({userStore: new Oidc.WebStorageStateStore(), response_mode: 'query'});
 
     mgr.signinRedirectCallback().then(function (user) {
-      window.location.href = '../';
+      window.location.href = '../admin';
     }).catch(function (err) {
       console.log(err);
     });

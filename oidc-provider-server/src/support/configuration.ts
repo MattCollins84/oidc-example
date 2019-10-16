@@ -21,6 +21,8 @@ export const configuration: Configuration = {
       client_secret: 'spa_secret',
       grant_types: ['refresh_token', 'authorization_code'],
       redirect_uris: ['http://localhost:8080/callback.html', 'http://localhost:8080/'],
+      post_logout_redirect_uris: ['http://localhost:8080/'],
+      token_endpoint_auth_method: 'none'
     }
   ],
   interactions: {
@@ -30,12 +32,20 @@ export const configuration: Configuration = {
     },
   },
   cookies: {
-    long: { signed: true, maxAge: (1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
-    short: { signed: true },
+    long: { signed: true, maxAge: 60000 * 15 }, //(1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
+    short: { signed: true, maxAge: 60000 * 15 },
     keys: ['some secret key', 'and also the old rotated away some time ago', 'and one more'],
   },
   claims: {
-    profile: ['name', 'email', 'capabilities'],
+    profile: ['name', 'email'],
+    capabilities: ['capabilities']
+  },
+  async issueRefreshToken(ctx, client, code) {
+    if (!client.grantTypeAllowed('refresh_token')) {
+      return false;
+    }
+    console.log('issue refresh token', code.scopes.has('offline_access'), client.applicationType, client.tokenEndpointAuthMethod)
+    return code.scopes.has('offline_access') || (client.applicationType === 'web' && client.tokenEndpointAuthMethod === 'none');
   },
   features: {
     devInteractions: { enabled: false }, // defaults to true
@@ -44,6 +54,7 @@ export const configuration: Configuration = {
     introspection: { enabled: true }, // defaults to false
     revocation: { enabled: true }, // defaults to false
   },
+  conformIdTokenClaims: false,
   jwks: {
     keys: [
       {
@@ -68,9 +79,9 @@ export const configuration: Configuration = {
     ],
   },
   ttl: {
-    AccessToken: 1 * 60 * 60, // 1 hour in seconds
+    AccessToken: 10 * 60, // 10 minutes in seconds 1 * 60 * 60, // 1 hour in seconds
     AuthorizationCode: 10 * 60, // 10 minutes in seconds
-    IdToken: 1 * 60 * 60, // 1 hour in seconds
+    IdToken: 10 * 60, // 10 minutes in seconds 1 * 60 * 60, // 1 hour in seconds
     DeviceCode: 10 * 60, // 10 minutes in seconds
     RefreshToken: 1 * 24 * 60 * 60, // 1 day in seconds
   },

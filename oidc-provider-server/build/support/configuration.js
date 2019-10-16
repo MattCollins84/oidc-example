@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const oidc_provider_1 = require("oidc-provider");
 const Prompt = oidc_provider_1.interactionPolicy.Prompt;
@@ -19,6 +28,8 @@ exports.configuration = {
             client_secret: 'spa_secret',
             grant_types: ['refresh_token', 'authorization_code'],
             redirect_uris: ['http://localhost:8080/callback.html', 'http://localhost:8080/'],
+            post_logout_redirect_uris: ['http://localhost:8080/'],
+            token_endpoint_auth_method: 'none'
         }
     ],
     interactions: {
@@ -28,12 +39,22 @@ exports.configuration = {
         },
     },
     cookies: {
-        long: { signed: true, maxAge: (1 * 24 * 60 * 60) * 1000 },
-        short: { signed: true },
+        long: { signed: true, maxAge: 60000 * 15 },
+        short: { signed: true, maxAge: 60000 * 15 },
         keys: ['some secret key', 'and also the old rotated away some time ago', 'and one more'],
     },
     claims: {
-        profile: ['name', 'email', 'capabilities'],
+        profile: ['name', 'email'],
+        capabilities: ['capabilities']
+    },
+    issueRefreshToken(ctx, client, code) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!client.grantTypeAllowed('refresh_token')) {
+                return false;
+            }
+            console.log('issue refresh token', code.scopes.has('offline_access'), client.applicationType, client.tokenEndpointAuthMethod);
+            return code.scopes.has('offline_access') || (client.applicationType === 'web' && client.tokenEndpointAuthMethod === 'none');
+        });
     },
     features: {
         devInteractions: { enabled: false },
@@ -41,6 +62,7 @@ exports.configuration = {
         introspection: { enabled: true },
         revocation: { enabled: true },
     },
+    conformIdTokenClaims: false,
     jwks: {
         keys: [
             {
@@ -65,9 +87,9 @@ exports.configuration = {
         ],
     },
     ttl: {
-        AccessToken: 1 * 60 * 60,
+        AccessToken: 10 * 60,
         AuthorizationCode: 10 * 60,
-        IdToken: 1 * 60 * 60,
+        IdToken: 10 * 60,
         DeviceCode: 10 * 60,
         RefreshToken: 1 * 24 * 60 * 60,
     },

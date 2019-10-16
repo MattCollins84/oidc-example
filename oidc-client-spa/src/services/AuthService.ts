@@ -10,10 +10,9 @@ export default class AuthService {
             userStore: new WebStorageStateStore({ store: window.localStorage }),
             authority: ISSUER,
             client_id: "spa_client",
-            client_secret: 'spa_secret',
             redirect_uri: "http://localhost:8080/callback.html",
             response_type: "code",
-            scope: "openid profile",
+            scope: "openid profile capabilities",
             post_logout_redirect_uri: "http://localhost:8080/",
             filterProtocolClaims: true,
             metadata: {
@@ -32,11 +31,11 @@ export default class AuthService {
         return this.userManager.getUser();
     }
 
-    public login(): Promise<void> {
-        return this.userManager.signinRedirect();
+    public async login(): Promise<void> {
+        return await this.userManager.signinRedirect();
     }
 
-    public logout(): Promise<void> {
-        return this.userManager.signoutRedirect();
+    public async logout(): Promise<void> {
+        return await this.userManager.signoutRedirect();
     }
 }

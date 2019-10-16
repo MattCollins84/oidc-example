@@ -54,7 +54,7 @@ export class Account {
     const user = await collection.findOne(query)
 
     if (!user) return null;
-    
+
     const account = new Account(user.username, user.profile)
     if (!logins.get(user.username)) {
       logins.set(user.username, account);

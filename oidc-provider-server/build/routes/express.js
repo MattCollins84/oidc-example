@@ -109,7 +109,7 @@ exports.routes = (app, provider) => {
     }));
     app.post('/interaction/:uid/login', setNoCache, body, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const { prompt: { name, details } } = yield provider.interactionDetails(req, res);
+            const { prompt: { name } } = yield provider.interactionDetails(req, res);
             assert_1.strict.equal(name, 'login');
             const account = yield account_1.Account.findFromDB(req.body);
             if (!account) {

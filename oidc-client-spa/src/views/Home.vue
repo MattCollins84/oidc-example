@@ -1,71 +1,37 @@
 <template>
-  <div class="container mt-3">
-    <div class="row">
-      <div class="col-sm text-center">
-        <p v-if="isLoggedIn">User: {{ username }}</p>
-        <p v-if="isLoggedIn">Email: {{ email }}</p>
-        <p v-if="isLoggedIn">Capabilities: {{ capabilities.join(', ') }}</p>
-        <button @click="login" v-if="!isLoggedIn">Login</button>
-        <button @click="logout" v-if="isLoggedIn">Logout</button>
-      </div>
+  <div class="row">
+    <div class="col-sm text-center">
+      <h1>This is a home page</h1>
+      <p v-for="(line, i) in content" :key="i" v-html="line"></p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import AuthService from '@/services/AuthService';
-
-interface IUser {
-  profile: IUserProfile
-}
-
-interface IUserProfile {
-  name: string;
-  email: string;
-  capabilities: string[]
-}
-
-const auth = new AuthService();
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import User from '@/services/User'
+import axios from 'axios'
 
 @Component({
-  components: {
-  },
-})
-export default class Home extends Vue {  
-  public user: IUser = null;
-  public accessTokenExpired: boolean | undefined = false;
-  public isLoggedIn: boolean = false;
-
-  get username(): string {
-    return this.user.profile.name;
-  }
-
-  get email(): string {
-    return this.user.profile.email;
-  }
-
-  get capabilities(): string[] {
-    return this.user.profile.capabilities;
-  }
-
-  public login() {
-    auth.login();
-  }
-
-  public logout() {
-    auth.logout();
-  }
-
-  public mounted() {
-    auth.getUser().then((user) => {
-      if (user !== null) {
-        this.user = user;
-        this.accessTokenExpired = user.expired;
+  beforeRouteEnter(to, from, next) {
+    next(async (vm) => {
+      try {
+        const response = await axios.get('http://localhost:5000/content')
+        vm.$data.content = response.data.content
+      } catch (e) {
+        alert(e.response)
       }
-
-      this.isLoggedIn = (user !== null && !user.expired);
-    });
+    })
   }
+})
+export default class Home extends Vue {
+  
+  @Prop(Object) user: User
+  public content: string[] = []
+
+  mounted() {
+
+  }
+
 }
 </script>
