@@ -13,5 +13,5 @@ The IDP is accessed from the UI (A simple SPA using Vue) and the returned capabi
 For more information on each individual component please see:
 
 * [OIDC Provider](/oidc-provider-server)
-* [SPA](/oidc-client-api)
+* [SPA](/oidc-client-spa)
 * [API](/oidc-client-api)
