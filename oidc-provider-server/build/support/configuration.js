@@ -52,6 +52,7 @@ exports.configuration = {
             if (!client.grantTypeAllowed('refresh_token')) {
                 return false;
             }
+            console.log('issue refresh token', code.scopes.has('offline_access') || (client.applicationType === 'web' && client.tokenEndpointAuthMethod === 'none'));
             return code.scopes.has('offline_access') || (client.applicationType === 'web' && client.tokenEndpointAuthMethod === 'none');
         });
     },

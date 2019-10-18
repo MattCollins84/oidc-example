@@ -9,9 +9,6 @@ new Vue({
   router,
   render: h => h(App),
   methods: {
-    userLoggedIn: function(user) {
-      console.log('receiving')
-      console.log(user)
-    }
+
   }
 }).$mount('#app')

@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Emit } from 'vue-property-decorator';
 import User from '@/services/User'
 import axios from 'axios'
 
@@ -27,10 +27,15 @@ import axios from 'axios'
 export default class Home extends Vue {
   
   @Prop(Object) user: User
+  @Emit('refreshUserPanel')
+  refreshUserPanel() {
+    return true
+  }
+
   public content: string[] = []
 
   mounted() {
-
+    this.refreshUserPanel()
   }
 
 }

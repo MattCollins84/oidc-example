@@ -8,8 +8,8 @@
         </ul>
       </div>
     </div>
-    <router-view/>
-    <user-panel/>
+    <router-view @refreshUserPanel="refreshUserPanel"/>
+    <user-panel ref="UserPanel"/>
   </div>
 </template>
 
@@ -22,7 +22,9 @@ export default {
     UserPanel
   },
   methods: {
-
+    refreshUserPanel: function() {
+      this.$refs.UserPanel.fetchUser()
+    }
   }
 };
 </script>

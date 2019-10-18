@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Emit } from 'vue-property-decorator';
 import AdminAction from '@/components/AdminAction.vue';
 import User from '@/services/User';
 
@@ -39,7 +39,15 @@ import User from '@/services/User';
 })
 export default class Admin extends Vue {
 
+  @Emit('refreshUserPanel')
+  refreshUserPanel() {
+    return true
+  }
   private user: User = null
+
+  mounted() {
+    this.refreshUserPanel()
+  }
 
 }
 </script>

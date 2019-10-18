@@ -64,6 +64,10 @@ export default class UserPanel extends Vue {
   }
 
   public async mounted() {
+    await this.fetchUser()
+  }
+
+  public async fetchUser() {
     const user = await User.getCurrentUser(false)
     this.user = user as User;
   }
