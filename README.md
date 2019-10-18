@@ -13,5 +13,8 @@ The IDP is accessed from the UI (A simple SPA using Vue) and the returned capabi
 For more information on each individual component please see:
 
 * [OIDC Provider](/oidc-provider-server)
-* [SPA](/oidc-client-api)
+* [SPA](/oidc-client-spa)
 * [API](/oidc-client-api)
+
+## Requirements
+You need a relatively new version of Node - `8.11+` is recommended - to run this demo (specifically the SPA).
